@@ -41,7 +41,7 @@ Both loader versions support the following features:
 
 ## Code Example (Unity 2021.1+)
 
-```csharp
+```
 // Configure in Inspector or via code
 public class GameManager : MonoBehaviour 
 {
@@ -59,6 +59,7 @@ public class GameManager : MonoBehaviour
         spriteLoader.UnloadAllSpriteAssets();
     }
 }
+```
 
 ## Benefits
 

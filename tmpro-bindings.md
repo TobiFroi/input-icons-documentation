@@ -65,7 +65,7 @@ Shows all available binding options, like "WASD or Arrow Keys":
 
 You can dynamically update text prompts using these methods:
 
-
+```
 // Update the text while preserving bindings
 textPrompt.SetText("Press <inputaction> to jump");
 
@@ -74,6 +74,7 @@ textPrompt.SetTextPromptData(newTextPromptDataList);
 
 // Use a preconfigured ScriptableObject for bindings
 textPrompt.SetTextPromptData(textPromptDataSO);
+```
 
 
 ## Multiple Actions

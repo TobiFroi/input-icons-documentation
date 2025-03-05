@@ -42,12 +42,13 @@ If you're using a generated C# class from an Input Action Asset and want to use 
 
 1. Call these methods in your Awake function where `inputActions` is your generated class instance:
 
-
+```
 // Register your generated class's asset for rebinding
 InputIconsManagerSO.RegisterInputActionAssetForRebinding(inputActions.asset);
 
 // Apply any saved binding overrides to your asset
 InputIconsManagerSO.UpdateRegisteredInputActionAssetsForRebinding(inputActions.asset);
+```
 
 2. These two lines ensure that:
 
@@ -62,19 +63,19 @@ For a complete example, see the "InputIcons_ExampleScene6_GeneratedCode" scene i
 If you prefer to implement your own rebinding system:
 
 1. Use the InputIconsManagerSO.ApplyBindingOverridesToInputActionAssets method to apply binding overrides to assets managed by the InputIconsManager
-
+```
 // After applying rebinds to your generated class
 YourInputActions inputActions = new YourInputActions();
 inputActions.Jump.ApplyBindingOverride("<Keyboard>/space");
 
 // Sync the changes with Input Icons
 InputIconsManagerSO.ApplyBindingOverridesToInputActionAssets();
-
+```
 2. This ensures the InputIconsManager displays the correct sprites after your custom rebinding process
 
 ## Saving and Loading Bindings
 The InputIconsManager automatically handles saving and loading binding overrides for registered Input Action Assets. You can also manually trigger these operations:
-
+```
 // Save current binding overrides
 InputIconsManagerSO.SaveUserBindings();
 
@@ -86,6 +87,7 @@ InputIconsManagerSO.ResetAllBindings();
 
 // Reset bindings for a specific asset
 InputIconsManagerSO.ResetBindingsOfAsset(inputActionAsset);
+```
 
 ## Event System Integration
 The rebind buttons integrate with Unity's Event System for seamless UI navigation:

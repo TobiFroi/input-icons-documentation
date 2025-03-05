@@ -35,7 +35,7 @@ If you're using Unity's PlayerInputManager for spawning players:
 2. Send these values to `InputIconsManagerSO.localMultiplayerManagement`
 3. Since every player has a unique device, you only need to define two control schemes (keyboard and gamepad)
 
-
+```
 // Attach to player prefab
 public class PlayerSetup : MonoBehaviour
 {
@@ -50,6 +50,7 @@ public class PlayerSetup : MonoBehaviour
             playerIndex, device, false);
     }
 }
+```
 
 ## Using a Custom Player Spawner
 For more advanced setups, such as allowing multiple players to use the same keyboard with different control schemes:
@@ -58,6 +59,7 @@ Listen for a "join" action
 Check if the control scheme that triggered the join action is available
 Spawn a player and assign the device and control scheme
 
+```
 // Example player spawner
 public void OnJoinActionPerformed(InputAction.CallbackContext context)
 {
@@ -80,6 +82,7 @@ public void OnJoinActionPerformed(InputAction.CallbackContext context)
             playerInput.playerIndex, controlSchemeName);
     }
 }
+```
 
 ## Multiplayer-Specific Components
 To display bindings for specific players, use these components:
@@ -101,7 +104,7 @@ When a device is assigned or unassigned, the onInputUsersChanged event is invoke
 
 ## Changing Displayed Bindings at Runtime
 Updating text in local multiplayer text prompts works similarly to updating regular text prompts:
-
+```
 // Update the text while preserving bindings
 localMultiplayerTextPrompt.SetText("Press <inputaction> to jump");
 
@@ -110,6 +113,7 @@ localMultiplayerTextPrompt.SetTextPromptData(newTextPromptDataList);
 
 // Use a preconfigured ScriptableObject for bindings
 localMultiplayerTextPrompt.SetTextPromptData(textPromptDataSO);
+```
 
 ## Example Scene
 For a complete implementation example, see the "Local Multiplayer Prompts" example scenes included with the package.
