@@ -1,8 +1,12 @@
-title: Just the Docs Template
-description: A starter template for a Jeykll site using the Just the Docs theme!
+title: Input Icons Documentation
+description: Documentation for Input Icons for Input System
 theme: just-the-docs
 
-url: https://just-the-docs.github.io
+url: https://github.com/TobiFroi/input-icons-documentation
 
 aux_links:
-  Template Repository: https://github.com/just-the-docs/just-the-docs-template
+  "Input Icons on Asset Store":
+    - "https://assetstore.unity.com/packages/tools/gui/input-icons-for-input-system-213736"
+
+# Makes Aux links open in a new tab
+aux_links_new_tab: true
