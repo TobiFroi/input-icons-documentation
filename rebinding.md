@@ -63,6 +63,7 @@ For a complete example, see the "InputIcons_ExampleScene6_GeneratedCode" scene i
 If you prefer to implement your own rebinding system:
 
 1. Use the InputIconsManagerSO.ApplyBindingOverridesToInputActionAssets method to apply binding overrides to assets managed by the InputIconsManager
+
 ```csharp
 // After applying rebinds to your generated class
 YourInputActions inputActions = new YourInputActions();
@@ -71,6 +72,7 @@ inputActions.Jump.ApplyBindingOverride("<Keyboard>/space");
 // Sync the changes with Input Icons
 InputIconsManagerSO.ApplyBindingOverridesToInputActionAssets();
 ```
+
 2. This ensures the InputIconsManager displays the correct sprites after your custom rebinding process
 
 ## Saving and Loading Bindings
