@@ -1,5 +1,3 @@
-### tmpro-bindings.md (child of displaying-bindings.md)
-```markdown
 ---
 title: TextMeshPro Bindings
 layout: default
@@ -76,3 +74,11 @@ textPrompt.SetTextPromptData(newTextPromptDataList);
 
 // Use a preconfigured ScriptableObject for bindings
 textPrompt.SetTextPromptData(textPromptDataSO);
+
+
+Multiple Actions
+Click the "Add" button at the bottom of the component to add multiple action references. The order matters:
+
+The first action reference replaces the first <inputaction>
+The second reference replaces the second <inputaction>
+And so on...

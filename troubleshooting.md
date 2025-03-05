@@ -53,7 +53,7 @@ If rebinding doesn't update gameplay:
 
 - When using a generated C# class from an Input Action Asset, you must manually sync changes
 - Add these lines in your Awake method (where "inputActions" is your generated class instance):
-  ```csharp
+  
   InputIconsManagerSO.RegisterInputActionAssetForRebinding(inputActions.asset);
   InputIconsManagerSO.UpdateRegisteredInputActionAssetsForRebinding(inputActions.asset);
 

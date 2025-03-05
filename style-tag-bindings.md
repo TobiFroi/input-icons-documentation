@@ -1,5 +1,3 @@
-### style-tag-bindings.md (child of displaying-bindings.md)
-```markdown
 ---
 title: Style Tag Bindings
 layout: default
