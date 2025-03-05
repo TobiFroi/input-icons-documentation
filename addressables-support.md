@@ -1,78 +1,75 @@
-### tmpro-bindings.md (child of displaying-bindings.md)
-```markdown
 ---
-title: TextMeshPro Bindings
+title: Addressables Support
 layout: default
-parent: Displaying Bindings
-nav_order: 2
+nav_order: 13
 ---
 
-# Displaying Bindings in TextMeshPro
+# Addressable Support for Sprite Assets
 
-The `II_TextPrompt` script allows you to display binding icons seamlessly within your TextMeshPro text. This component replaces instances of `<inputaction>` with sprite tags showing the bindings of your referenced actions.
+TextMeshPro typically expects sprite assets to be in specific Resource folders, but you can optimize your project by using Unity's Addressable Asset System to load these assets on demand.
 
-## Basic Setup
+## Setup Options
 
-1. Add the `II_TextPrompt` component to a GameObject that has a TextMeshPro component
-2. Assign a reference to your TextMeshPro component
-3. Assign one or more action references
-4. Type your text in the `II_TextPrompt` inspector, using `<inputaction>` where you want to show bindings
+### For Unity 2021.1 or newer with Addressables:
 
-![TextPrompt Component](/input-icons-documentation/assets/images/text-prompt-component.png)
+1. **Install the Addressables Package** if you haven't already (via Window > Package Manager).
+2. **Create an Addressables Group** for your sprite assets:
+   * Open the Addressables Groups window (Window > Asset Management > Addressables > Groups)
+   * Create a new group (e.g., "TMP_SpriteAssets")
+   * Drag your sprite assets into this group
+3. **Add the TMPSpriteAssetLoader to your scene**:
+   * Add it to a GameObject in your initial/persistent scene
+   * Configure your sprite asset references in the Inspector using the Addressable references
 
-## Action Display Types
+### For Unity 2020.3 and earlier:
 
-The component provides three ways to display actions:
+1. **Add the TMPSpriteAssetLoaderLegacy to your scene**:
+   * Add it to a GameObject in your initial/persistent scene  
+   * Directly assign your TMP_SpriteAsset objects to the sprite assets list in the Inspector
 
-### Single Binding
+## Configuration
 
-Shows a single binding, similar to the Sprite and Image prompts:
+Both loader versions support the following features:
 
-![Single Binding](/input-icons-documentation/assets/images/tmpro-single-binding.png)
+* **Platform-Specific Loading**:
+  * Configure different sprite assets for different platforms (Windows, PlayStation, Xbox, etc.)
+  * Create separate configurations for keyboard, gamepad, or touch controls as needed
+  
+* **Dynamic Loading**:
+  * Load specific configurations by name during runtime using the `LoadConfigByName()` method
+  * Unload all sprite assets when no longer needed with `UnloadAllSpriteAssets()`
 
-| Setting | Description |
-|---------|-------------|
-| Search Method | "Binding Type" or "Binding Index" |
-| Advanced Mode | Provides more controls for complex bindings |
-
-### All Matching Bindings Single
-
-Shows multiple bindings together, useful for composite bindings like WASD:
-
-![All Matching Bindings](/input-icons-documentation/assets/images/tmpro-all-bindings.png)
-
-| Setting | Description |
-|---------|-------------|
-| Binding ID All List | Controls which set of bindings to display |
-| Advanced Mode | Provides additional control options |
-
-### All Matching Bindings With Delimiters
-
-Shows all available binding options, like "WASD or Arrow Keys":
-
-![All Bindings With Delimiters](/input-icons-documentation/assets/images/tmpro-bindings-delimited.png)
-
-| Setting | Description |
-|---------|-------------|
-| Delimiter | Text placed between available bindings |
-
-## Component Settings
-
-| Setting | Description |
-|---------|-------------|
-| Allow Tinting | Enables sprite tinting using the `<color>` tag |
-| Use Font | Uses a special SDF font instead of sprites (experimental) |
-
-## Updating Text at Runtime
-
-You can dynamically update text prompts using these methods:
+## Code Example (Unity 2021.1+)
 
 ```csharp
-// Update the text while preserving bindings
-textPrompt.SetText("Press <inputaction> to jump");
+// Configure in Inspector or via code
+public class GameManager : MonoBehaviour 
+{
+    public TMPSpriteAssetLoader spriteLoader;
+    
+    void Start() 
+    {
+        // Optionally load a specific config by name
+        spriteLoader.LoadConfigByName("PlayStationIcons");
+    }
+    
+    void OnDestroy() 
+    {
+        // When no longer needed
+        spriteLoader.UnloadAllSpriteAssets();
+    }
+}
 
-// Update the bindings to display
-textPrompt.SetTextPromptData(newTextPromptDataList);
+## Benefits
 
-// Use a preconfigured ScriptableObject for bindings
-textPrompt.SetTextPromptData(textPromptDataSO);
+Reduced initial load times and memory usage
+Platform-specific assets loaded only when needed
+Better organization of input-related sprite assets
+Smaller build sizes when using Addressables (2021.1+ version)
+
+## Common Issues
+
+If sprites don't appear after loading, try refreshing your TMP_Text components using the RefreshTextComponents() method
+Make sure your TMP Settings paths are correctly configured if you've moved your assets
+For the Addressables version, remember that assets are loaded asynchronously, so plan accordingly in your UI initialization
+

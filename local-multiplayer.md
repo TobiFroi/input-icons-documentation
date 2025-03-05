@@ -35,7 +35,7 @@ If you're using Unity's PlayerInputManager for spawning players:
 2. Send these values to `InputIconsManagerSO.localMultiplayerManagement`
 3. Since every player has a unique device, you only need to define two control schemes (keyboard and gamepad)
 
-```csharp
+
 // Attach to player prefab
 public class PlayerSetup : MonoBehaviour
 {
@@ -83,7 +83,7 @@ public void OnJoinActionPerformed(InputAction.CallbackContext context)
 
 ## Multiplayer-Specific Components
 To display bindings for specific players, use these components:
-### For Sprites and Images
+## For Sprites and Images
 
 * II_LocalMultiplayerSpritePrompt: Displays bindings in SpriteRenderers
 * II_LocalMultiplayerImagePrompt: Displays bindings in UI Images

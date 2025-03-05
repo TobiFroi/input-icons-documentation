@@ -16,7 +16,6 @@ The UI Toolkit extension allows you to display Input Icons within UI Toolkit int
 - Update bindings automatically when input devices change
 - Integrate with UI Builder for visual editing
 
-![UI Toolkit Integration](/input-icons-documentation/assets/images/ui-toolkit-integration.png)
 
 ## Availability
 

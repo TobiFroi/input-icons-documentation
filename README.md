@@ -1,8 +1,3 @@
----
-title: Home
-layout: home
-nav_order: 1
----
 
 # Input Icons for Input System
 

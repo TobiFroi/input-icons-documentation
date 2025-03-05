@@ -18,11 +18,12 @@ Before continuing with the TextMeshPro setup, ensure you have:
 ## Setup Process
 
 1. Open the Input Icons Setup window (Tools → Input Icons → Input Icons Setup)
-2. Navigate to the "Setup for TextMeshPro" section
 
 ![TMP Setup Window](/input-icons-documentation/assets/images/tmp-setup.png)
 
-3. **Check TextMeshPro Paths**: If you moved the TextMeshPro folder to a different location, update the path values before proceeding
+2. **Base Setup**: Choose Control Schemes and Manage Input Action Assets
+
+3. **TextMeshPro Setup**: If you moved the TextMeshPro folder to a different location, update the path values before proceeding
    - Default Sprite Assets path: "Assets/TextMesh Pro/Resources/Sprite Assets/"
    - Default Style Sheet path: "Assets/TextMesh Pro/Resources/Style Sheets/"
 
@@ -36,6 +37,10 @@ Before continuing with the TextMeshPro setup, ensure you have:
    - If you selected "Use fonts", SDF font assets will also be created
 
 6. **Recompile**: You may need to recompile your project or enter play mode for the new Sprite Assets to take effect
+
+7. **Style Tag Setup**: You can display prompts without the need for additional components by using the TMP style tag.
+   - Add style sheet entries to the default style sheet
+   - The styles update at runtime to display keyboard or gamepad sprites
 
 ## What Gets Created
 

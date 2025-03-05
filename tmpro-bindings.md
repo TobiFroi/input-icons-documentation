@@ -65,7 +65,7 @@ Shows all available binding options, like "WASD or Arrow Keys":
 
 You can dynamically update text prompts using these methods:
 
-```csharp
+
 // Update the text while preserving bindings
 textPrompt.SetText("Press <inputaction> to jump");
 
@@ -76,7 +76,7 @@ textPrompt.SetTextPromptData(newTextPromptDataList);
 textPrompt.SetTextPromptData(textPromptDataSO);
 
 
-Multiple Actions
+## Multiple Actions
 Click the "Add" button at the bottom of the component to add multiple action references. The order matters:
 
 The first action reference replaces the first <inputaction>
