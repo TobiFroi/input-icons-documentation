@@ -42,7 +42,7 @@ If you're using a generated C# class from an Input Action Asset and want to use 
 
 1. Call these methods in your Awake function where `inputActions` is your generated class instance:
 
-```
+```csharp
 // Register your generated class's asset for rebinding
 InputIconsManagerSO.RegisterInputActionAssetForRebinding(inputActions.asset);
 
@@ -63,7 +63,7 @@ For a complete example, see the "InputIcons_ExampleScene6_GeneratedCode" scene i
 If you prefer to implement your own rebinding system:
 
 1. Use the InputIconsManagerSO.ApplyBindingOverridesToInputActionAssets method to apply binding overrides to assets managed by the InputIconsManager
-```
+```csharp
 // After applying rebinds to your generated class
 YourInputActions inputActions = new YourInputActions();
 inputActions.Jump.ApplyBindingOverride("<Keyboard>/space");
@@ -75,7 +75,7 @@ InputIconsManagerSO.ApplyBindingOverridesToInputActionAssets();
 
 ## Saving and Loading Bindings
 The InputIconsManager automatically handles saving and loading binding overrides for registered Input Action Assets. You can also manually trigger these operations:
-```
+```csharp
 // Save current binding overrides
 InputIconsManagerSO.SaveUserBindings();
 
