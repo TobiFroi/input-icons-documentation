@@ -20,6 +20,8 @@ TextMeshPro typically expects sprite assets to be in specific Resource folders, 
 3. **Add the TMPSpriteAssetLoader to your scene**:
    * Add it to a GameObject in your initial/persistent scene
    * Configure your sprite asset references in the Inspector using the Addressable references
+   
+![Sprite Asset Loader Component](/input-icons-documentation/assets/images/addressables-asset-loader.png)
 
 ### For Unity 2020.3 and earlier:
 
