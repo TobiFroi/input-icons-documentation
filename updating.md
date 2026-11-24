@@ -1,37 +1,76 @@
 ---
-title: "Updating From An Earlier Version"
+title: Updating the Asset
 layout: default
-nav_order: 4
-parent: "Getting Started"
+nav_order: 11
 ---
 
 # Updating From An Earlier Version
 
-When updating, it's essential to have a backup prepared in case of any unforeseen issues.
+When updating Input Icons to a new version, it's important to follow some best practices to ensure a smooth transition and avoid losing your custom settings.
 
-**Folder location:** Since version 4.2.0, new installations of Input Icons are placed in “Assets/TobiFroi/InputIcons”. Projects that already contain Input Icons keep their “Assets/InputIcons” folder, the update gets imported there and you don’t need to move anything. If you want to move the folder, do so inside the Unity Editor (Project window), not in the file explorer. The paths in this guide use the new location.
+## Before Updating
 
-**Steam:** Since version 4.2.0, Input Icons does not connect to Steam on its own anymore. If your game uses Steamworks.NET or Facepunch Steamworks, see chapter [Steam Input Troubleshooting](/input-icons-documentation/steam).
+Always create a backup of your project before updating to a new version of Input Icons. This ensures you can revert if any unforeseen issues arise.
 
-**Setup window:** Since version 5.0.0, Input Icons comes with a new setup wizard (Tools → Input Icons → Input Icons Setup Wizard) and an Input Icons Settings window. Existing projects keep working without changes and don’t need to be set up again. The classic setup window is still available. When you run the new setup, it creates your own copies of the Input Icons Manager and Configurator in “Assets/TobiFroi/InputIconsSettings/Resources/InputIcons” (if your active ones are still the ones inside the Input Icons folder), so future updates can’t overwrite your settings. If an earlier setup created them in “Assets/InputIconsSettings”, they keep working there; you can move that folder into “Assets/TobiFroi” if you like, as long as the files stay in a Resources/InputIcons folder.
+## Preserving Custom Settings
 
-**Sprite assets:** After updating to 5.0.0, create the sprite assets again (setup wizard, or Project Status → Re-create sprite assets), so they include the new pressed sprites.
+When updating, your settings on the manager and configurator might be reset to default values. To prevent this:
 
-Upgrading to a new version may result in your settings being reset to default values. To prevent your settings on the manager and configurator from being overwritten during an update process, we can first duplicate these two assets, rename them and use them instead. Since version 3.2.12 it is possible to duplicate them directly through the setup window (within the Base Setup section). After the duplication, they should have “Is Actual Manager” or “Is Actual Configurator” enabled in the inspector of each asset.
+### Method 1: Using the Setup Window (Recommended)
 
-<img src="/input-icons-documentation/assets/images/guide/updating-1.png" alt="Screenshot" width="278">
+Since version 3.2.12, you can easily create duplicates of the manager and configurator through the setup window:
 
-<img src="/input-icons-documentation/assets/images/guide/updating-2.png" alt="Screenshot" width="278">
+1. Open Tools → Input Icons → Input Icons Setup
+2. In the Base Setup section, look for the duplication options
+3. Click to duplicate the InputIconManager and InputIconConfigurator
+4. The duplicated assets will have "Is Actual Manager" or "Is Actual Configurator" enabled in their inspector
 
-**If you don’t have your own duplicated versions:**
+![Duplicating Manager](/input-icons-documentation/assets/images/duplicate-manager.png)
 
-Any modifications made to the InputIconManager and the InputIconConfigurator could potentially be lost and may need to be recreated. If you haven't made extensive changes, updating the references in the setup window (Tools → Input Icons → Input Icons Setup) should be sufficient. However, it's advisable to also inspect the Input Icons Manager (located in Assets/TobiFroi/InputIcons/Resources/InputIcons/) for a comprehensive overview.
+### Method 2: Manual Duplication
 
-<img src="/input-icons-documentation/assets/images/guide/updating-3.png" alt="Screenshot" width="210">
+If you're on an earlier version or prefer manual control:
 
-If you've made alterations to the icon sets that include the displayed sprites, consider creating a copy of them before the update. This allows you to reuse your custom icon sets after the update. Make sure to reassign your personalized icon sets to the InputIconSetConfigurator.
+1. Locate the InputIconManager and InputIconConfigurator in the project
+   - Usually found in Assets/InputIcons/Resources/InputIcons/
+2. Duplicate these assets (Ctrl+D or right-click → Duplicate)
+3. Rename the duplicates clearly (e.g., "MyCustomInputIconManager")
+4. Enable "Is Actual Manager" or "Is Actual Configurator" in the inspector of each asset
 
-<img src="/input-icons-documentation/assets/images/guide/updating-4.png" alt="Screenshot" width="338">
+## After Updating
 
-<img src="/input-icons-documentation/assets/images/guide/updating-5.png" alt="Screenshot" width="344">
+After updating to a new version:
 
+1. **Check your references**: Ensure the Input Icons Setup window points to your custom manager and configurator assets
+2. **Verify settings**: Check that your settings have been preserved
+3. **Update TMP resources if needed**: If the update changed any TextMeshPro resources, you might need to regenerate them
+
+## Preserving Custom Icon Sets
+
+If you've created custom icon sets with your own sprites:
+
+1. Before updating, create a copy of your custom icon sets
+2. After updating, ensure these custom icon sets are still assigned in the InputIconSetConfigurator
+3. If needed, reassign your icon sets in the Customization section of the setup window
+
+![Custom Icon Sets](/input-icons-documentation/assets/images/custom-icon-sets.png)
+
+## Handling Major Version Updates
+
+When updating across major versions (e.g., from 2.x to 3.x):
+
+1. Read the changelog thoroughly to understand new features and breaking changes
+2. Consider setting up the new version in a test project first
+3. Follow any specific update instructions provided in the release notes
+4. You may need to reconfigure some aspects of your setup for major version changes
+
+## Troubleshooting Update Issues
+
+If you encounter issues after updating:
+
+1. **Missing scripts**: Reimport the Input Icons package
+2. **Compile errors**: Check for any API changes that might affect your custom scripts
+3. **Display issues**: Regenerate sprite assets using the setup window
+4. **Duplicate managers**: Ensure only one manager and configurator have the "Is Actual" flag enabled
+
+If problems persist, you can always revert to your backup and contact support for assistance.

@@ -1,74 +1,64 @@
 ---
-title: "Mobile (Android & iOS)"
+title: Mobile Support
 layout: default
-nav_order: 1
-parent: "Devices and Platforms"
+nav_order: 6
 ---
 
-# Mobile (Android & iOS)
+# Mobile Support (Android & iOS)
 
-Since version 3.2.0 displaying specific sprites on mobile devices is supported with some differences when compared to Keyboard and Gamepad support.
+Since version 3.2.0, Input Icons supports displaying specific sprites on mobile devices, with some differences compared to keyboard and gamepad support.
 
-The main difference is that the displayed sprites are not derived from an actual binding within an Input Action Asset. This means the displayed sprites for mobile are fixed and will not adapt to rebound input actions. For the vast majority of games this should not be an issue as users are not used to rebind mobile input anyways (e.g. rebinding single touch (Touch\[Touchscreen\]) to multi touch (touch\*/Press\[Touchscreen\]).
+## Key Differences
 
-<img src="/input-icons-documentation/assets/images/guide/mobile-support-1.png" alt="Screenshot" width="219">
+The main difference is that displayed sprites on mobile are **not** derived from actual bindings within an Input Action Asset. The displayed sprites are fixed and will not adapt to rebound input actions. For most mobile games, this isn't an issue as users rarely rebind touch inputs.
 
-So instead of referencing an input action in our components, we will instead use strings – specifically the strings defined in our mobile Icon Set. The **default mobile Icon Set** is placed under the “**Assets/TobiFroi/InputIcons/Icon Sets/Mobile/”** folder. As you can see in the image beside, we mainly use the Custom Context list to define which mobile actions we want to display.
+## Mobile Icon Sets
 
-It is highly recommended to **duplicate this asset (IconSet_Mobile_Grey) and exchange the sprites with your own sprites**. You can adjust your Icon Set to your liking. After that, head to the **Setup Window** (Tools – Input Icons -Input Icons Setup) and to the **Customization section** and replace the default Icon Set with your own. After that make sure to **(re-)create the sprite asset** containing your mobile sprites.
+Instead of referencing an input action in your components, you'll use strings defined in your mobile Icon Set:
 
-We can display mobile icons with SpriteRenderers, UI Images and TextMeshPro Texts. To make the mobile support component to work, the corresponding Input Icons Base Prompt Component needs to be attached to the object as well (have a look at the table below).
+1. Find the default mobile Icon Set at "Assets/InputIcons/IconSet_Mobile_Grey"
+2. Use the Custom Context list to define mobile actions you want to display
+3. **Recommended**: Duplicate this asset and replace sprites with your own
 
-The behavior works as follows. When the Base Prompt Component updates the displayed sprites, it will fire an event. The Mobile Support Component will react to that event by overriding the sprites or \<inputaction\> tags with the ones used for the mobile version.
+![Mobile Icon Set](/input-icons-documentation/assets/images/mobile-icon-set.png)
 
-<table>
-<colgroup>
-<col style="width: 17%" />
-<col style="width: 40%" />
-<col style="width: 42%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th><strong>Base Prompt Component</strong></th>
-<th><strong>Mobile Support Component</strong></th>
-<th><strong>Example</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>II_SpritePrompt</strong></td>
-<td><p><strong>II_SpritePromptMobileOverride</strong></p>
-<p>Requires an II_SpritePrompt component.</p>
-<p>Add sprite overrides using the button at the bottom. Then reference the same SpriteRenderers you referenced in the II_SpritePrompt and select which sprite to display.</p>
-<p>The available sprite options depend on the mobile Icon Set referenced on the InputIconSetConfiguratorSO.</p></td>
-<td>
+After customizing your Icon Set:
+1. Open the Setup Window (Tools – Input Icons - Input Icons Setup)
+2. Navigate to the Customization section
+3. Replace the default Icon Set with your own
+4. Re-create the sprite asset containing your mobile sprites
 
-<img src="/input-icons-documentation/assets/images/guide/mobile-support-2.png" alt="Screenshot">
+## Mobile Support Components
 
-</td>
-</tr>
-<tr class="even">
-<td><strong>II_ImagePrompt</strong></td>
-<td><p><strong>II_ImagePromptMobileOverride</strong></p>
-<p>Requires an II_ImagePrompt component.</p>
-<p>The rest is very similar to the component described above.</p></td>
-<td>
+To display mobile icons, you need both a base prompt component and a corresponding mobile override component:
 
-<img src="/input-icons-documentation/assets/images/guide/mobile-support-3.png" alt="Screenshot">
+| Base Component | Mobile Override | Purpose |
+|----------------|-----------------|---------|
+| II_SpritePrompt | II_SpritePromptMobileOverride | Override sprites for SpriteRenderers |
+| II_ImagePrompt | II_ImagePromptMobileOverride | Override sprites for UI Images |
+| II_TextPrompt | II_TextPromptMobileOverride | Replace `<inputaction>` tags with mobile sprites |
 
-</td>
-</tr>
-<tr class="odd">
-<td><strong>II_TextPrompt</strong></td>
-<td><p><strong>II_TextPromptMobileOverride</strong></p>
-<p>Requires a II_TextPrompt component.</p>
-<p>This allows you to replace the occurances of &lt;inputaction&gt; with the sprites defined in your mobile Icon Set.</p>
-<p>You can replace a single &lt;inputaction&gt; tag with multiple sprites by adding more fields.</p></td>
-<td>
+### How It Works
 
-<img src="/input-icons-documentation/assets/images/guide/mobile-support-4.png" alt="Screenshot">
+When the Base Prompt Component updates displayed sprites, it fires an event. The Mobile Support Component reacts by overriding sprites or `<inputaction>` tags with mobile-specific versions.
 
-</td>
-</tr>
-</tbody>
-</table>
+## Example Setup for Sprite Renderer
+
+1. Add both `II_SpritePrompt` and `II_SpritePromptMobileOverride` to a GameObject
+2. Configure the `II_SpritePrompt` component normally
+3. In the `II_SpritePromptMobileOverride`:
+   - Click "Add Sprite Override"
+   - Reference the same SpriteRenderer used in `II_SpritePrompt`
+   - Select which mobile sprite to display
+
+![Mobile Sprite Override](/input-icons-documentation/assets/images/mobile-sprite-override.png)
+
+## Example Setup for TextMeshPro
+
+1. Add both `II_TextPrompt` and `II_TextPromptMobileOverride` to a GameObject
+2. Configure the `II_TextPrompt` component normally
+3. In the `II_TextPromptMobileOverride`:
+   - Add mobile override entries
+   - Each entry can replace a single `<inputaction>` tag with one or more mobile sprites
+
+![Mobile Text Override](/input-icons-documentation/assets/images/mobile-text-override.png)
