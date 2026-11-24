@@ -1,122 +1,174 @@
 ---
-title: Local Multiplayer
+title: "Local Multiplayer"
 layout: default
 nav_order: 5
+parent: "Displaying Bindings"
 ---
 
-# Displaying Bindings in Local Multiplayer Games
+# Local Multiplayer
 
-Input Icons provides robust support for local multiplayer games, allowing you to display the correct input prompts for each player based on their assigned device.
+Setting up local multiplayer is not an easy task, but Input Icons provides the tools to make it much more manageable. This section will guide you through the complete setup process.
 
-## Overview
+**Overview**
 
-In local multiplayer scenarios, you need to track which device belongs to which player and display the appropriate bindings. The `InputIconsManagerSO` manages a dictionary of users that you can access through `InputIconsManagerSO.localMultiplayerManagement`.
+The **InputIconsManagerSO** manages a dictionary of users which you can access and manage through the static field **InputIconsManagerSO.localMultiplayerManagement**. This system allows each player to have their own control scheme and device assignment while maintaining separate binding configurations.
 
-## Player and Device Management
+**Example Scene Reference**: For a complete working implementation, examine the **InputIcons_ExampleScene12_LocalMultiplayerMultipleControlSchemes** scene. This example demonstrates all the concepts covered in this guide and provides a practical reference for your own implementation.
 
-### Key Methods
+**Key Methods**
 
-| Method | Purpose |
-|--------|---------|
-| `AssignDeviceToPlayer(int playerID, InputDevice device, bool tryToReassign)` | Links a device to a specific playerID |
-| `SetControlSchemeForPlayer(int playeriD, string controlSchemeName)` | Assigns a control scheme to a player |
-| `TryReassignDevice(InputDevice reconnectedDevice)` | Attempts to reassign a device based on its description |
-| `UnassignDeviceFromPlayer(int playerID)` | Removes device from player but keeps ID for possible reassignment |
+Here are the essential methods you'll use for local multiplayer management:
 
-### Implementation Approaches
+| **AssignDeviceToPlayer (int playerID, InputDevice device, bool tryToReassign)** | Links a device to a specific playerID. If tryToReassign is true, this method will search through existing players and link the device to the original player if the device description matches. |
+|---------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **SetControlSchemeForPlayer (int playerID, string controlSchemeName)**          | Assigns a control scheme to a player, making it easier for multiplayer prompts to display the correct sprites.                                                                                  |
+| **TryReassignDevice(InputDevice reconnectedDevice)**                            | Attempts to reassign a device based on the device description.                                                                                                                                  |
+| **UnassignDeviceFromPlayer(int playerID)**                                      | Sets the device for a specific playerID to null but keeps the playerID and device description for future reassignment.                                                                          |
 
-Depending on how your game spawns and manages players, you can use different approaches:
+**Step-by-Step Setup Guide**
 
-#### Using Unity's Player Input Manager
+**1. Configure Your Input Action Asset**
 
-If you're using Unity's PlayerInputManager for spawning players:
+First, set up your Input Action Asset with control schemes for each player. You can use descriptive names like:
 
-1. Attach a script to your player prefab that reads values from the PlayerInput component
-2. Send these values to `InputIconsManagerSO.localMultiplayerManagement`
-3. Since every player has a unique device, you only need to define two control schemes (keyboard and gamepad)
+- Gamepad, Gamepad 2, Keyboard And Mouse, Keyboard And Mouse 2
 
-```
-// Attach to player prefab
-public class PlayerSetup : MonoBehaviour
-{
-    void Start()
-    {
-        PlayerInput playerInput = GetComponent<PlayerInput>();
-        int playerIndex = playerInput.playerIndex;
-        InputDevice device = playerInput.devices[0];
-        
-        // Register the player with Input Icons
-        InputIconsManagerSO.localMultiplayerManagement.AssignDeviceToPlayer(
-            playerIndex, device, false);
-    }
-}
-```
+- Or player-based names like Player1, Player2, Player3, Player4
 
-## Using a Custom Player Spawner
-For more advanced setups, such as allowing multiple players to use the same keyboard with different control schemes:
+Each control scheme should define which devices that player can use and contain all the actions they need.
 
-Listen for a "join" action
-Check if the control scheme that triggered the join action is available
-Spawn a player and assign the device and control scheme
+**2. Choose Your Player Spawning Method**
 
-```
-// Example player spawner
-public void OnJoinActionPerformed(InputAction.CallbackContext context)
-{
-    // Get device and control scheme
-    InputDevice device = context.control.device;
-    string controlSchemeName = GetControlSchemeForDevice(device);
-    
-    // Check if this control scheme is already in use
-    if (IsControlSchemeAvailable(controlSchemeName))
-    {
-        // Spawn player
-        PlayerInput playerInput = PlayerInput.Instantiate(playerPrefab, 
-            controlScheme: controlSchemeName, 
-            pairWithDevice: device);
-            
-        // Register with Input Icons
-        InputIconsManagerSO.localMultiplayerManagement.AssignDeviceToPlayer(
-            playerInput.playerIndex, device, false);
-        InputIconsManagerSO.localMultiplayerManagement.SetControlSchemeForPlayer(
-            playerInput.playerIndex, controlSchemeName);
-    }
-}
-```
+You have two main approaches for spawning players:
 
-## Multiplayer-Specific Components
-To display bindings for specific players, use these components:
-## For Sprites and Images
+**Option A: Unity's Player Input Manager Component**
 
-* II_LocalMultiplayerSpritePrompt: Displays bindings in SpriteRenderers
-* II_LocalMultiplayerImagePrompt: Displays bindings in UI Images
+- Attach a Player Input component to your player prefab
 
-These components work similarly to the regular prompt components but add a PlayerID field to specify which player's bindings to display.
+- Add a script that reads values from the Player Input component and sends them to InputIconsManagerSO.localMultiplayerManagement
 
-## For TextMeshPro
+- Since each player has a unique device, you typically need only two control schemes (keyboard and gamepad)
 
-II_LocalMultiplayerTextPrompt: Displays bindings in TextMeshPro text
+**Option B: Custom Player Spawner (Recommended for Advanced Setup)**
 
-This component functions like the standard II_TextPrompt but displays bindings for a specific player.
+This method allows multiple players to share the same keyboard through separate control schemes:
 
-## Runtime Control
-When a device is assigned or unassigned, the onInputUsersChanged event is invoked, causing the multiplayer prompt components to update their displayed icons automatically.
+<img src="/input-icons-documentation/assets/images/guide/local-multiplayer-1.png" alt="Screenshot" width="540">
 
-## Changing Displayed Bindings at Runtime
-Updating text in local multiplayer text prompts works similarly to updating regular text prompts:
-```
-// Update the text while preserving bindings
-localMultiplayerTextPrompt.SetText("Press <inputaction> to jump");
+**3. Set Up Display Components**
 
-// Update the bindings to display
-localMultiplayerTextPrompt.SetTextPromptData(newTextPromptDataList);
+Use these components to show bindings for each player:
 
-// Use a preconfigured ScriptableObject for bindings
-localMultiplayerTextPrompt.SetTextPromptData(textPromptDataSO);
-```
+- **II_LocalMultiplayerSpritePrompt -** Displays sprite-based button prompts
 
-## Example Scene
-For a complete implementation example, see the "Local Multiplayer Prompts" example scenes included with the package.
-{: .note }
-Local multiplayer support is a relatively newer feature and may receive updates. If you encounter issues or have feature requests, please contact the developer.
-    
+- **II_LocalMultiplayerImagePrompt -** Displays image-based button prompts
+
+- **II_LocalMultiplayerTextPrompt -** Displays text-based button prompts
+
+**Component Choice Clarification:** Each component requires a **PlayerID** field that matches against the multiplayer dictionary to display the correct sprites for that player's control scheme and device.
+
+**Alternative Approach**: If you're using Option B (Custom Player Spawner), you can also use the standard single-player components which may be easier to set up:
+
+- **II_SpritePrompt** - Configure directly to a specific control scheme
+
+- **II_ImagePrompt** - Configure directly to a specific control scheme
+
+- **II_TextPrompt** - Configure directly to a specific control scheme
+
+These standard components can be simpler to use since you can directly assign the control scheme rather than managing PlayerIDs, making them a good choice even for multiplayer scenarios.
+
+**4. Implement Rebinding Support for Local Multiplayer Games**
+
+For local multiplayer rebinding, Input Icons provides the II_LocalMultiplayerRebindReactor component that handles binding synchronization across all players.
+
+**A. Rebinding UI Components**
+
+- Use the **II_UIRebindInputActionImageBehaviour** script
+
+- Or use the pre-made **II_UI_RebindActionImageObject prefab** from the Prefabs folder
+
+**B. Rebind Reactor Component**
+
+Add the II_LocalMultiplayerRebindReactor script to each player controller:
+
+**Required Configuration:**
+
+- **Original Input Action Asset**: Drag in your Input Action Asset
+
+- **Player Input To Update**: Assign the PlayerInput component (auto-detects if on same object)
+
+- **Log Binding Updates**: Enable for debugging rebinding issues
+
+**How It Works:** The rebind reactor automatically subscribes to Input Icons binding events and applies changes to each player's action asset by overwriting the bindings of the the referenced input action asset.
+
+<img src="/input-icons-documentation/assets/images/guide/local-multiplayer-2.png" alt="Screenshot" width="379">
+
+**Key Features:**
+
+- **Automatic Synchronization**: When any player rebinds a key, all players receive the updated bindings
+
+- **Control Scheme Isolation**: Each player only uses bindings that match their specific control scheme
+
+- **Persistent Storage**: Supports both file system and PlayerPrefs for saving bindings
+
+- **Error Handling**: Includes comprehensive error handling and optional debug logging
+
+- **Manual Testing**: Provides ForceUpdateBindings() method for testing
+
+This system ensures that when Player 1 rebinds their "Q" key, it won't affect Player 2's "Enter" key since they use different control schemes, keeping each player's controls completely separate.
+
+## Player Profile Support
+
+**Note**: The previous guide statement about profiles not working with simultaneous local multiplayer was incorrect and has been removed. Player profiles work perfectly with local multiplayer games.
+
+Player profiles are designed for family members taking turns and wanting to quickly switch between preferred bindings (e.g., one prefers WASD, another prefers arrow keys). While less critical for simultaneous multiplayer, profiles can still be useful and work automatically with Input Icons.
+
+Use InputIconsManagerSO.SwitchToPlayerProfile(int profileIndex) to switch between saved binding configurations when needed.
+
+**Events and Updates**
+
+The onInputUsersChanged event is invoked when players are assigned or unassigned, causing components like II_LocalMultiplayerSpritePrompt to automatically update their displayed sprites.
+
+**Example Implementation Summary**
+
+Input Icons provides ready-to-use components that handle most of the complexity:
+
+1.  **Set up your Input Action Asset** with control schemes for each player (P1-P4)
+
+2.  **Add II_LocalMultiplayerControlSchemePlayerSpawner** to handle player joining:
+
+    - Configure join action reference and player prefab
+
+    - Set control scheme names to match your Input Action Asset
+
+3.  **Use II_LocalMultiplayerPlayerInputHandler** on spawned players to manage control schemes
+
+4.  **Add display components** (II_LocalMultiplayerSpritePrompt, etc.) with appropriate PlayerID assignments
+
+5.  **Include II_LocalMultiplayerRebindReactor** on each player for binding customization support
+
+6.  **Set up rebinding UI** using II_UIRebindInputActionImageBehaviour or the provided prefabs
+
+The provided components handle device tracking, control scheme assignment, and binding synchronization automatically, so you can focus on your game logic rather than input management details.
+
+**Troubleshooting**
+
+If you encounter issues:
+
+- Verify that PlayerIDs match between your spawner and display components
+
+- Ensure control scheme names in your Input Action Asset match those used in SetControlSchemeForPlayer()
+
+- Check that devices are properly assigned before attempting to display prompts
+
+- Enable debug logging in II_LocalMultiplayerRebindReactor for rebinding issues
+
+**Example Scene Reference**: The **InputIcons_ExampleScene12_LocalMultiplayerMultipleControlSchemes** scene provides a complete working implementation that you can study and use as a reference for troubleshooting your own setup.
+
+You can use the following components to display bindings in local multiplayer games for each player:
+
+Note this is quite a new feature and there might be bugs. If you think something important is missing, please let me know (<support@octacube-studios.com>)
+
+### Changing displayed Bindings in II_LocalMultiplayerTextPrompts
+
+Updating text in local multiplayer text prompts does work very similar to updating general II_TextPrompt components. Have a look at the 4.1.3.

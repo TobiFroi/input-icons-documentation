@@ -1,13 +1,23 @@
 title: Input Icons Documentation
-description: Documentation for Input Icons for Input System
+description: Documentation for Input Icons for Input System (Unity Asset Store)
 theme: just-the-docs
 color_scheme: dark-custom
 
-url: https://github.com/TobiFroi/input-icons-documentation
+url: https://tobifroi.github.io
 
 aux_links:
-  "Input Icons on Asset Store":
+  "Input Icons on the Asset Store":
     - "https://assetstore.unity.com/packages/tools/gui/input-icons-for-input-system-213736"
+  "Setup Video":
+    - "https://youtu.be/h4XxsPpJeCA"
 
 # Makes Aux links open in a new tab
 aux_links_new_tab: true
+
+# Search and navigation
+search_enabled: true
+heading_anchors: true
+back_to_top: true
+back_to_top_text: "Back to top"
+
+footer_content: "Input Icons for Input System by Tobias Froihofer. Questions or problems? See <a href=\"/input-icons-documentation/support\">Licenses and Contact</a>."

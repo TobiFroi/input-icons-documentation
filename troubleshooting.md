@@ -1,74 +1,66 @@
 ---
-title: Troubleshooting
+title: "Troubleshooting"
 layout: default
-nav_order: 8
+nav_order: 10
+has_children: true
 ---
 
 # Troubleshooting
 
-This section covers common issues and their solutions.
+**Compile errors on import**
 
-## Common Issues
+- In an empty project with TMPro and the new Input System installed, you should not face compile errors. If you do however, please contact me as there might be some issues I don’t know of in specific Unity versions.
 
-| Problem | Possible Cause | Solution |
-|---------|----------------|----------|
-| Compile errors on import | Missing dependencies | Ensure TextMeshPro, Input System, and 2D Sprite packages are installed |
-| Steamworks errors | Steamworks integration | If using Steamworks, ensure the Steamworks.NET package is installed |
-| Missing style tags | Style sheet not updated | Run the setup tool again to update the TextMeshPro Default Style Sheet |
-| Control schemes not working | Name mismatch | Ensure control scheme names match between Input Action Assets and the Setup window |
-| Settings not applied | Manager reset after update | Reopen the setup window and reconfigure settings after updating |
-| Icons not displaying in build | Manager not initialized | Make sure the Input Icons Manager is properly initialized in your first scene |
+- **Steamworks / InputIconsSteamworksExtensionSO / InputIconsFacepunchSteamworksExtensionSO**: If you get a compile error stating that the type or namespace name ‘Steamworks’ could not be found, then you probably have STEAMWORKS_NET in your Scripting Define Symbols in the Project Settings and are using some type of plugin to make calls to the Steam API. For Input Icons I used the open source framework Steamworks.NET (<https://github.com/rlabrecque/Steamworks.NET/releases>), and if you don’t have that package in your project (while having STEAMWORKS_NET in your Scripting Define Symbols), you might face the above mentioned compile error(s). Adding that package should fix the problems. Similar for Facepunch Steamworks (<https://wiki.facepunch.com/steamworks/>). When using Facepunch Steamworks, make sure you have FACEPUNCH_STEAMWORKS added to your Scripting Defining Symbols. If you experience compile errors anyways, check the Assembly Definition called "**InputIcons**" in the "**Assets/TobiFroi/InputIcons/Scripts/Runtime/**" folder. **[com.rlabrecque.steamworks.net](http://com.rlabrecque.steamworks.net)** should be added to the Assembly Definition References. **If you want to use a different framework** and not Steamworks.NET or Facepunch Steamworks, you might have to add some custom code for Steam games. The **InputIconsSteamworksExtensionSO and InputIconsFacepunchSteamworksExtensionSO** tell Input Icons the real controller type of each gamepad through **InputIconSetConfiguratorSO.deviceTypeResolver**. You can register your own resolver there, using the framework of your choice.
 
-## Steamworks / Steamworks.NET Issues
+Most other problems appear from an incorrect setup. Remember, whenever you make changes to an Input Action Asset, to also update the style sheet (Project Status page of the setup wizard, or the classic setup window). The Project Status page also finds many other setup issues.
 
-If you get compile errors related to Steamworks: Type or namespace name 'Steamworks' could not be found
+Also make sure, the control scheme names in the setup window match the control scheme names in your Input Action Assets (sometimes an empty space slips in at the end of a string, it can happen to everyone)
 
-This means you have `STEAMWORKS_NET` in your Scripting Define Symbols but don't have the Steamworks.NET package installed.
+If you have updated to a new version of Input Icons and your active Input Icons Manager is still the one inside the Input Icons folder, its values might have changed to the default ones. Run the setup wizard: it creates your own copies of the manager and configurator outside of the Input Icons folder, so this can’t happen again.
 
-Solutions:
-1. Install [Steamworks.NET](https://github.com/rlabrecque/Steamworks.NET/releases)
-2. Ensure "com.rlabrecque.steamworks.net" is added to the Assembly Definition References
-3. If using a different Steam framework, you may need custom code
+**Error: “… The type or namespace name '…' does not exist in the namespace ‘…’ (are you missing an assembly reference?)”**
 
-## Missing Assembly References
+- Assembly Definitions got added in v1.3.22. To properly include them, the folder structure of the asset needed to be changed. When updating to the latest version you could end up with a wrong folder structure, making the Assembly Definitions not work correctly. To solve the issue, **delete the content of the “Scripts” folder in “InputIcons/Scripts” and reimport the asset** or the Scripts folder again.
 
-If you see errors like: The type or namespace name '...' does not exist in the namespace '...'
+**The tool does not behave like configured in the Input Icons Manager or in the Input Icon Set Configurator**
 
-This is likely due to Assembly Definitions issues:
+- It could be that you have two Input Icon Manager or Configurator assets in your project and they are fighting for which one actually gets used. Find your Manager and Configurator in the project and make sure “Is Actual Manager” or “Is Actual Configurator” is checked on the one you want to use.
 
-1. Delete the content of the "Scripts" folder in "InputIcons/Scripts"
-2. Reimport the asset or the Scripts folder
+<img src="/input-icons-documentation/assets/images/guide/updating-1.png" alt="Screenshot" width="317">
 
-## TextMeshPro Style Tags Troubleshooting
+<img src="/input-icons-documentation/assets/images/guide/troubleshooting-1.png" alt="Screenshot" width="265">
 
-If your style tags aren't working:
+**When you rebind using the rebind prefabs, the icons are updated correctly, but the controls don’t change.**
 
-1. **Check Sprite Assets**: Verify that sprite assets exist in "Assets/TextMesh Pro/Resources/Sprite Assets/" with names matching your Icon Sets
-2. **Check Style Sheet**: Look for your actions in the Default Style Sheet at "Assets/TextMesh Pro/Resources/Style Sheets/"
-3. **Persistence Issues**: If styles disappear after restarting Unity, make a small manual change to the style sheet and undo it to force a save
+- This can happen when you use a generated C# class to handle player input. The rebind prefabs can only rebind the actions of the Input Action Asset and not the actions of a generated C# class. Check section [Rebinding Using A Generated C# Class](/input-icons-documentation/rebinding#rebinding-using-a-generated-c-class).
 
-## Rebinding Issues
+**Controls are weird or do not work anymore**
 
-If rebinding doesn't update gameplay:
+- The reason might be that you have several active Player Input components in the scene. Search the hierarchy for “Player Input”.
 
-- When using a generated C# class from an Input Action Asset, you must manually sync changes
-- Add these lines in your Awake method (where "inputActions" is your generated class instance):
-  ```
-  InputIconsManagerSO.RegisterInputActionAssetForRebinding(inputActions.asset);
-  InputIconsManagerSO.UpdateRegisteredInputActionAssetsForRebinding(inputActions.asset);
+- Another reason could be that the Unity Editor or a build of your game is connected to Steam. Once the Unity Editor has been connected to Steam, it stays connected until you close Unity, which can cause gamepads to stop responding. Restart Unity and see chapter [Steam Input Troubleshooting](/input-icons-documentation/steam) for more information.
 
+**The icons change correctly in the editor but not in the build**
 
-## Controls Issues
-If controls behave strangely:
+- Make sure there is only one active Input Icons Manager and Configurator in your project (see the previous points). The Input Icons Settings window shows the path of the active manager at the top.
 
-Check for multiple active Player Input components in your scene
-Steam can interfere with controls if the Unity Player runs via Steam
-Try recreating your Input Action Asset if you've upgraded from an older Input System version
+- In some strange cases you might have to recreate the Input Action Asset. I had users reporting that they created their Input Action Asset with Input System 1.3.0, then updated to 1.4.4 and had to recreate their Input Action Asset. Otherwise somehow in the final build the 1.3.0 version was still present.
 
-## Build Issues
-If icons work in the editor but not in builds:
+**A gamepad doesn’t control the game and the icons don’t switch**
 
-Make sure the Input Icons Manager is properly initialized in your first scene
-Check that all necessary sprites are included in your build
-Verify that your TextMeshPro resources are properly included in the build
+- Some gamepads have a switch between XInput (X) and DirectInput (D) mode. In DirectInput mode, Unity detects them as generic joysticks, which \<Gamepad\> bindings don’t match. Switch the gamepad to XInput mode (see section [Keyboard And Gamepad Support](/input-icons-documentation/devices)).
 
+**Prompts don’t animate**
+
+- Make sure “Animate” is enabled on the entry (action reference) that should animate. On all prompts, “Animate” is set per entry.
+
+- Only keys with a pressed sprite animate. Check the icon set used for the current device.
+
+- Text Prompts and animated style tags need an animated sprite asset for the icon set. The Project Status page of the setup wizard shows missing or outdated sprite assets.
+
+- For animated style tags, “Create animated style tags” must be enabled and the styles must have been added to the style sheet again afterwards.
+
+<!-- -->
+
+- A text only shows the first sprite of the animation: a script probably calls **ForceMeshUpdate()** on it (e.g. a text effect or typewriter script, or one that reads the text info). Rebuilding the mesh stops TextMesh Pro’s sprite animation of that text, because the animation keeps changing the old mesh data. Read the text info without ForceMeshUpdate, or avoid rebuilding texts with animated sprites.

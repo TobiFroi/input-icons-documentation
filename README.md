@@ -1,14 +1,9 @@
+# Input Icons Documentation
 
-# Input Icons for Input System
+Online documentation for [Input Icons for Input System](https://assetstore.unity.com/packages/tools/gui/input-icons-for-input-system-213736), published at https://tobifroi.github.io/input-icons-documentation/
 
-Welcome to the documentation for Input Icons, a tool for easily displaying input bindings in Unity projects.
+Built with Jekyll and the [Just the Docs](https://just-the-docs.com/) theme. GitHub Actions builds and deploys the site on every push to `main` (see `.github/workflows/pages.yml`).
 
-## Features
+To preview locally: `bundle install`, then `bundle exec jekyll serve --baseurl /input-icons-documentation`.
 
-- Display input bindings in SpriteRenderers, UI Images, and TMPro texts
-- Support for keyboard/mouse and gamepad controls
-- Dynamic updates when input devices change
-- Support for mobile, local multiplayer, and UI Toolkit
-
-[Get Started](getting-started){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
-[View on Asset Store](https://assetstore.unity.com/packages/tools/gui/input-icons-for-input-system-213736){: .btn .fs-5 .mb-4 .mb-md-0 }
+The pages are based on the PDF guide that comes with the package (version 5.0). Screenshots are in `assets/images/guide/`, named after the page they belong to.
